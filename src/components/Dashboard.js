@@ -8,11 +8,12 @@ import {
     TableRow
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import Chart from './Chart'
-import Total from './Total'
-import AddCar from './AddCar'
+import Chart from '../containers/Chart'
+import Total from '../containers/Total'
+import AddCar from '../containers/AddCar'
  
 const Dashboard = (props) => {
+    console.log('rendering dashboard')
     return (
         <Container maxWidth="lg" className="car-container">
             <h4>Welcome, {props.user.username}</h4>
@@ -33,7 +34,13 @@ const Dashboard = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {props.cars.map((car, idx) => (
+                {/* {props.cars.map((car, idx) => ( */}
+                {props.cars && props.cars.map((car, idx) => {
+                    if (!car) {
+                        console.warn("not a car at index:", idx);
+                        return null;
+                    }
+                    return (
                     <TableRow key={car.id}>
                         <TableCell component="th" scope="row">
                             {car.id}
@@ -45,10 +52,13 @@ const Dashboard = (props) => {
                         <TableCell>
                             <DeleteIcon
                                 // add onClick method here
+                                onClick={() => props.removeCar(idx)}
                                 className="icon text-red" />
                         </TableCell>
                     </TableRow>
-                ))}
+                )}
+                )
+            }
                 </TableBody>
             </Table>
         </Container>
